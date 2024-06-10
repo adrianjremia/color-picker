@@ -1,2 +1,2 @@
-# color-picker
-Dominant Color Picker
+# Color Picker
+Dominant Color Picker from an Uploaded Image
