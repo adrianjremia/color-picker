@@ -9,20 +9,15 @@ def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % rgb
 
 def get_palette(image, n_colors=5):
-    # Reshape image to be a list of pixels
     pixels = image.reshape(-1, 3)
 
-    # Fit the KMeans model
     kmeans = KMeans(n_clusters=n_colors)
     kmeans.fit(pixels)
 
-    # Get the number of pixels for each cluster
     counts = Counter(kmeans.labels_)
 
-    # Get the colors (RGB)
     center_colors = kmeans.cluster_centers_
 
-    # Sort colors by frequency
     sorted_indices = [i[0] for i in sorted(enumerate(counts.values()), key=lambda x: x[1], reverse=True)]
     ordered_colors = [center_colors[i] for i in sorted_indices]
     hex_colors = [rgb_to_hex(tuple(map(int, color))) for color in ordered_colors]
@@ -80,7 +75,6 @@ def main():
         image = np.array(cv2.imdecode(np.frombuffer(uploaded_file.read(), np.uint8), cv2.IMREAD_COLOR))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        # Convert image to base64 for displaying with border
         _, buffer = cv2.imencode('.png', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
         img_str = base64.b64encode(buffer).decode()
 
@@ -91,7 +85,7 @@ def main():
 
         st.write("Palette:")
         
-        cols = st.columns(5)  # Create columns for better layout
+        cols = st.columns(5)  
         for i, color in enumerate(ordered_colors):
             rgb_color = tuple(map(int, color))
             hex_color = hex_colors[i]
